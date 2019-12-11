@@ -13,9 +13,7 @@ class Computer:
         i = 0
 
         while True:
-            print(self.code)
             instruction = get_instruction(self.code[i])
-            print(instruction)
 
             opcode = int(str(instruction[3]) + str(instruction[4]))
 
