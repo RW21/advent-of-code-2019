@@ -6,8 +6,11 @@ def get_instruction(instruction):
 
 
 class Computer:
-    def __init__(self, code):
+    def __init__(self, code, input=None):
         self.code = code + [0 for i in range(100)]
+        self.inputs = None
+        self.input_counter = 0
+        self.outputs = []
 
     def execute(self):
         i = 0
@@ -45,11 +48,12 @@ class Computer:
                 i += 4
 
             elif opcode == 3:
-                self.code[self.code[i + 1]] = int(input("input: "))
+                self.code[self.code[i + 1]] = self.get_input()
                 i += 2
 
             elif opcode == 4:
                 print(f'output: {self.code[index_1]}')
+                self.add_output(self.code[index_1])
                 i += 2
 
             elif opcode == 5:
@@ -84,6 +88,16 @@ class Computer:
     def replace(self, positions: dict):
         for position, value in positions.items():
             self.code[position] = value
+
+    def get_input(self):
+        if self.inputs is None:
+            return int(input('input: '))
+        else:
+            self.input_counter += 1
+            return self.inputs[self.input_counter - 1]
+
+    def add_output(self, output):
+        self.outputs.append(output)
 
 
 def file_to_list(file):
