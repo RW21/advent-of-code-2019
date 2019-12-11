@@ -24,14 +24,16 @@ orbits = {}
 for line in lines:
     line = line.split(')')
 
-    child = line[1][:3]
+    child = line[1][:3].replace('\n', '')
     parent = line[0]
 
     orbits[child] = parent
 
+# part A
 
 count = 0
 for orbit in orbits.keys():
     count += get_total_orbits(orbits, orbit)
 
 print(count)
+
