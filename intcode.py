@@ -6,14 +6,18 @@ def get_instruction(instruction):
 
 
 class Computer:
-    def __init__(self, code, input=None):
+    def __init__(self, code, input=[]):
         self.code = code + [0 for i in range(100)]
-        self.inputs = None
-        self.input_counter = 0
+        self.inputs = input
+        self.input_counter = len(self.inputs)
         self.outputs = []
+        self.halt = False
+        self.name = None
 
     def execute(self):
         i = 0
+        if self.name is not None:
+            print(f'Name: {self.name}')
 
         while True:
             instruction = get_instruction(self.code[i])
@@ -48,7 +52,9 @@ class Computer:
                 i += 4
 
             elif opcode == 3:
-                self.code[self.code[i + 1]] = self.get_input()
+                inputs = self.get_input()
+                print(f'input: {inputs}')
+                self.code[self.code[i + 1]] = inputs
                 i += 2
 
             elif opcode == 4:
@@ -83,6 +89,7 @@ class Computer:
                 i += 4
 
             elif opcode == 99:
+                self.halt = True
                 break
 
     def replace(self, positions: dict):
@@ -90,14 +97,17 @@ class Computer:
             self.code[position] = value
 
     def get_input(self):
-        if self.inputs is None:
+        if len(self.inputs) == 0:
             return int(input('input: '))
         else:
-            self.input_counter += 1
             return self.inputs[self.input_counter - 1]
 
     def add_output(self, output):
         self.outputs.append(output)
+
+    def add_input(self, input):
+        self.inputs.append(input)
+        self.input_counter += 1
 
 
 def file_to_list(file):
